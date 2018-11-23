@@ -21,11 +21,7 @@ namespace quiz_backend.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Question>> Get()
         {
-            return new Question[] {
-                new Question(){Text = "First Question"},
-                new Question(){Text = "Second Question"},
-                new Question(){Text = "Third Question"},
-            };
+            return _context.Questions;
         }
 
         // POST api/values
