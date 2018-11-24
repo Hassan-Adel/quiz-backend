@@ -33,7 +33,9 @@ namespace quiz_backend
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             }));
-            services.AddDbContext<QuizDBContext>(options => options.UseInMemoryDatabase("QuizDB"));
+            var DefaultConnection = "Server = (localdb)\\mssqllocaldb; Database = QuizDB; Trusted_Connection = True; MultipleActiveResultSets = true";
+            services.AddDbContext<QuizDBContext>(options => options.UseSqlServer(DefaultConnection));
+            //services.AddDbContext<QuizDBContext>(options => options.UseInMemoryDatabase("QuizDB"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

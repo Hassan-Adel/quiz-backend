@@ -25,11 +25,7 @@ namespace quiz_backend.Controllers
         [HttpGet]
         public IEnumerable<Quiz> GetQuiz()
         {
-            //return _context.Quiz;
-            return new Models.Quiz[] {
-                new Models.Quiz() { ID = 2, Title = "hello"},
-                new Models.Quiz() { ID = 1, Title = "hi"}
-            };
+            return _context.Quiz;
         }
 
         // GET: api/Quizes/5
