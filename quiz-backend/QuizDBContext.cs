@@ -13,17 +13,17 @@ namespace quiz_backend
         public DbSet<Question> Questions { get; set; }
         public DbSet<Quiz> Quiz { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Quiz>().HasData(
-                new Quiz { Title = "Carson" },
-                new Quiz { Title = "Carson2" }
-                );
-            modelBuilder.Entity<Question>().HasData(
-                new Question { Text = "Carson", CorrectAnswer = "Alexander", Answer1 = "2005-09-01", QuizId = 1 },
-                new Question { Text = "Carson2", CorrectAnswer = "Alexande2r", Answer1 = "2005-09-02", QuizId = 2 }
-                );
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Quiz>().HasData(
+        //        new Quiz { ID = 1, Title = "Carson" },
+        //        new Quiz { ID = 2, Title = "Carson2" }
+        //        );
+        //    modelBuilder.Entity<Question>().HasData(
+        //        new Question { ID = 1, Text = "Carson", CorrectAnswer = "Alexander", Answer1 = "2005-09-01", QuizId = 1 },
+        //        new Question { ID = 2, Text = "Carson2", CorrectAnswer = "Alexande2r", Answer1 = "2005-09-02", QuizId = 2 }
+        //        );
+        //}
 
     }
 }

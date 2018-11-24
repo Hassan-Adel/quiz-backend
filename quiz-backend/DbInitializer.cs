@@ -21,8 +21,8 @@ namespace quiz_backend
 
             var quizs = new Quiz[]
             {
-            new Quiz{Title="Carson"},
-            new Quiz{Title="Carson2"}
+            new Quiz{Title="Carson From dbInitializer"},
+            new Quiz{Title="Carson2 From dbInitializer"}
 
             };
             foreach (Quiz qu in quizs)
@@ -33,8 +33,8 @@ namespace quiz_backend
 
             var questions = new Question[]
             {
-            new Question{Text="Carson",CorrectAnswer="Alexander",Answer1="2005-09-01", QuizId=1},
-            new Question{Text="Carson2",CorrectAnswer="Alexande2r",Answer1="2005-09-02", QuizId=2}
+            new Question{Text="Carson From dbInitializer",CorrectAnswer="Alexander",Answer1="2005-09-01", QuizId=1},
+            new Question{Text="Carson2 From dbInitializer",CorrectAnswer="Alexande2r",Answer1="2005-09-02", QuizId=2}
 
             };
             foreach (Question q in questions)
