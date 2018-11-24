@@ -25,15 +25,27 @@ namespace quiz_backend.Controllers
             return _context.Questions;
         }
 
+        [HttpGet("{quizId}")]
+        public IEnumerable<Question> Get([FromRoute] int quizId)
+        {
+            return _context.Questions.Where(question => question.QuizId == quizId);
+        }
+
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Question question)
         {
+            var resultQuiz = _context.Quiz.SingleOrDefault(q => q.ID == question.QuizId);
+
+            if (resultQuiz == null)
+                return NotFound(question);
+
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
             //returns question with the Id
             return Ok(question);
         }
+
         /*
          Why I changed these functions from asynchronous to synchronous, and is one better than the other. There's usually not a general answer for that, it depends on the situation. 
          So depending on the web server you're using, such as IIS, it might be able to handle a lot more threads or requests than the database we're trying to access.
