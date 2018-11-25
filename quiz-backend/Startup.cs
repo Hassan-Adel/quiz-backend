@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,8 +34,19 @@ namespace quiz_backend
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             }));
-            var DefaultConnection = "Server = (localdb)\\mssqllocaldb; Database = QuizDB; Trusted_Connection = True; MultipleActiveResultSets = true";
-            services.AddDbContext<QuizDBContext>(options => options.UseSqlServer(DefaultConnection));
+
+            var DefaultConnection1 = "Server = (localdb)\\mssqllocaldb; Database = QuizDB; Trusted_Connection = True; MultipleActiveResultSets = true";
+            services.AddDbContext<QuizDBContext>(options => options.UseSqlServer(DefaultConnection1));
+            var DefaultConnection2 = "Server = (localdb)\\mssqllocaldb; Database = QuizUserDB; Trusted_Connection = True; MultipleActiveResultSets = true";
+            services.AddDbContext<UserDBContext>(options => options.UseSqlServer(DefaultConnection2));
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            }).AddEntityFrameworkStores<UserDBContext>();
             //services.AddDbContext<QuizDBContext>(options => options.UseInMemoryDatabase("QuizDB"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
