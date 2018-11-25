@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -43,10 +44,15 @@ namespace quiz_backend.Controllers
                 return BadRequest(result.Errors);
 
             await signInManager.SignInAsync(user, isPersistent: false);
+            //Add user.Id claim to be sent back in the header from the front end
+            var claim = new Claim[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id)
+            };
             //The algorithm: 'HS256' requires the SecurityKey.KeySize to be greater than '128' bits. KeySize reported: '104'.Parameter name: KeySize
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is the secret phrase"));
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-            var jwt = new JwtSecurityToken(signingCredentials: signingCredentials);
+            var jwt = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claim);
             return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
         }
     }

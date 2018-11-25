@@ -23,10 +23,12 @@ namespace quiz_backend.Controllers
         }
 
         // GET: api/Quizes
+        [Authorize]
         [HttpGet]
         public IEnumerable<Quiz> GetQuiz()
         {
-            return _context.Quiz;
+            var userId = HttpContext.User.Claims.First().Value;
+            return _context.Quiz.Where(Q => Q.OwnerId == userId);
         }
 
         // GET: api/Quizes/5
@@ -92,6 +94,10 @@ namespace quiz_backend.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //Since we're adding only one claim, the user Id, to the claimed list, this will work just fine.
+            var userId = HttpContext.User.Claims.First().Value;
+            if (!String.IsNullOrEmpty(userId))
+                quiz.OwnerId = userId;
 
             _context.Quiz.Add(quiz);
             await _context.SaveChangesAsync();
