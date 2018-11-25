@@ -44,6 +44,23 @@ namespace quiz_backend.Controllers
                 return BadRequest(result.Errors);
 
             await signInManager.SignInAsync(user, isPersistent: false);
+            return Ok(CreateToken(user));
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Credentials credentials)
+        {
+            var result = await signInManager.PasswordSignInAsync(credentials.Email, credentials.Password, false, false);
+
+            if (!result.Succeeded)
+                return BadRequest();
+
+            var user = await userManager.FindByEmailAsync(credentials.Email);
+            return Ok(CreateToken(user));
+        }
+
+        private string CreateToken(IdentityUser user)
+        {
             //Add user.Id claim to be sent back in the header from the front end
             var claim = new Claim[]
             {
@@ -53,7 +70,7 @@ namespace quiz_backend.Controllers
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is the secret phrase"));
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             var jwt = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claim);
-            return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
 }
