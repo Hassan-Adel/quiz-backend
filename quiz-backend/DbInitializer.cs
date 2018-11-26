@@ -21,8 +21,8 @@ namespace quiz_backend
 
             var quizs = new Quiz[]
             {
-            new Quiz{Title="Carson From dbInitializer"},
-            new Quiz{Title="Carson2 From dbInitializer"}
+            new Quiz{Title="Carson From dbInitializer", OwnerId = "3d7bb503-07f9-4322-a510-6af0aa8f3cbc"},
+            new Quiz{Title="Carson2 From dbInitializer", OwnerId = "3d7bb503-07f9-4322-a510-6af0aa8f3cbc"}
 
             };
             foreach (Quiz qu in quizs)

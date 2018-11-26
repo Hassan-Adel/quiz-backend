@@ -27,8 +27,22 @@ namespace quiz_backend.Controllers
         [HttpGet]
         public IEnumerable<Quiz> GetQuiz()
         {
-            var userId = HttpContext.User.Claims.First().Value;
-            return _context.Quiz.Where(Q => Q.OwnerId == userId);
+            try
+            {
+                var userId = HttpContext.User.Claims.First().Value;
+                return _context.Quiz.Where(Q => Q.OwnerId == userId);
+            }catch(Exception e)
+            {
+                var Error = e;
+                return null;
+            }
+            
+        }
+
+        [HttpGet("all")]
+        public IEnumerable<Quiz> GetAllQuizzes()
+        {
+            return _context.Quiz;
         }
 
         // GET: api/Quizes/5
@@ -90,19 +104,28 @@ namespace quiz_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> PostQuiz([FromBody] Quiz quiz)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                //Since we're adding only one claim, the user Id, to the claimed list, this will work just fine.
+                var userId = HttpContext.User.Claims.First().Value;
+                if (!String.IsNullOrEmpty(userId))
+                    quiz.OwnerId = userId;
+
+                _context.Quiz.Add(quiz);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetQuiz", new { id = quiz.ID }, quiz);
             }
-            //Since we're adding only one claim, the user Id, to the claimed list, this will work just fine.
-            var userId = HttpContext.User.Claims.First().Value;
-            if (!String.IsNullOrEmpty(userId))
-                quiz.OwnerId = userId;
-
-            _context.Quiz.Add(quiz);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetQuiz", new { id = quiz.ID }, quiz);
+            catch (Exception e)
+            {
+                var Error = e;
+                return BadRequest(e);
+            }
+            
         }
 
         // DELETE: api/Quizes/5
